@@ -40,7 +40,7 @@ app.get("/:key", (req, res) => {
     const data = readDataFromFile();
     const item = data[req.params.key];
     if (!item) {
-        res.status(404).json({ok: true, error: "Not found"});
+        res.json({ok: false, status: 404, error: "not_found"});
         return;
     }
     if (item.hash === req.query.hash) {
@@ -57,10 +57,14 @@ app.post("/:key/:hash", (req, res) => {
     res.json({ok: true});
 });
 
+app.use((req, res, next) => {
+    res.status(404).json({ok: false, status: 404, error: "unknown_path", path: req.path});
+});
+
 app.delete("/:key", (req, res) => {
     const data = readDataFromFile();
     if (!data[req.params.key]) {
-        res.status(404).json({ok: false, error: "Not found"});
+        res.json({ok: false, status: 404, error: "not_found"});
         return;
     }
     delete data[req.params.key];

@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon index.js -w index.js -V",
-    "run": "node index.js",
+    "prod": "node index.js --port 9995 --data data.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
