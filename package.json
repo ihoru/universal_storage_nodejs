@@ -1,0 +1,33 @@
+{
+  "name": "universal_storage_server",
+  "version": "1.0.0",
+  "description": "Simple server for universal file storage",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon index.js -w index.js -V",
+    "run": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ihoru/universal_storage_nodejs.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "storage"
+  ],
+  "author": "ihoru",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ihoru/universal_storage_nodejs/issues"
+  },
+  "homepage": "https://github.com/ihoru/universal_storage_nodejs#readme",
+  "dependencies": {
+    "argparse": "^2.0.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}
