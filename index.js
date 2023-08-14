@@ -31,8 +31,8 @@ app.get("/", (req, res) => {
         ok: true,
         version,
         description: parser.description,
-        details: "GET /[key]?hash=[hash]\n" +
-            "POST /[key]/[hash] BODY",
+        details: "GET /[key]?timestamp=[timestamp]\n" +
+            "POST /[key]/[timestamp] BODY",
     });
 });
 
@@ -43,16 +43,18 @@ app.get("/:key", (req, res) => {
         res.json({ok: false, status: 404, error: "not_found"});
         return;
     }
-    if (item.hash === req.query.hash) {
+    const localTimestamp = parseInt(item.timestamp)
+    const externalTimestamp = parseInt(req.query.timestamp)
+    if (localTimestamp && externalTimestamp && localTimestamp === externalTimestamp) {
         res.status(304).json({ok: true});
         return;
     }
-    res.json({ok: true, hash: item.hash, data: item.data});
+    res.json({ok: true, timestamp: item.timestamp, data: item.data});
 });
 
-app.post("/:key/:hash", (req, res) => {
+app.post("/:key/:timestamp", (req, res) => {
     const data = readDataFromFile();
-    data[req.params.key] = {data: req.body, hash: req.params.hash};
+    data[req.params.key] = {data: req.body, timestamp: req.params.timestamp};
     saveDataToFile(data);
     res.json({ok: true});
 });
