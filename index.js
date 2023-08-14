@@ -43,8 +43,8 @@ app.get("/:key", (req, res) => {
         res.json({ok: false, status: 404, error: "not_found"});
         return;
     }
-    const localTimestamp = parseInt(item.timestamp)
-    const externalTimestamp = parseInt(req.query.timestamp)
+    const localTimestamp = parseInt(item.timestamp) || 0;
+    const externalTimestamp = parseInt(req.query.timestamp) || 0;
     if (localTimestamp && externalTimestamp && localTimestamp === externalTimestamp) {
         res.status(304).json({ok: true});
         return;
@@ -54,7 +54,14 @@ app.get("/:key", (req, res) => {
 
 app.post("/:key/:timestamp", (req, res) => {
     const data = readDataFromFile();
-    data[req.params.key] = {data: req.body, timestamp: req.params.timestamp};
+    const timestamp = parseInt(req.params.timestamp) || 0;
+    const oldTimestamp = parseInt(req.query.oldTimestamp) || 0;
+    const item = data[req.params.key];
+    if (item && item.timestamp > oldTimestamp) {
+        res.json({ok: false, timestamp: item.timestamp, data: item.data, error: "timestamp_too_old"});
+        return;
+    }
+    data[req.params.key] = {data: req.body, timestamp: timestamp};
     saveDataToFile(data);
     res.json({ok: true});
 });
